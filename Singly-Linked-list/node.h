@@ -2,8 +2,8 @@
 // Created by Sherif on 2/4/2017.
 //
 
-#ifndef ASFSD_LINKEDLIST_H
-#define ASFSD_LINKEDLIST_H
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
 
 
 #include <ostream>
@@ -16,12 +16,10 @@ public:
     virtual ~node();
     node(int data, node *nxt= nullptr);
     node *getNxt() const;
+    int  getData() const;
     void setNxt(node *nxt);
-    int getData() const;
     void setData(int data);
 };
-
-
 
 class LinkedList {
 private:
@@ -29,24 +27,23 @@ private:
 public:
     int size;
     LinkedList();
-    void print();//O(n)
-    node *begin() const; //O(1)
-    node* search(int x);//O(n)
-    int addBack(int x); //O(1)
-    int addFirst(int x); //O(1)
-    bool addAfter(int a, node* x); //O(1)
-    bool popback();
-    bool popfront();
-    bool addBefore(int a, node* x); //O(n)
-    bool replace(int a, node *x); //O(1)
-    bool replace(int a, int x); //O(n) Adds after first occurrence of X
-    bool replaceAll(int a, int x); //O(n)
-    bool deleteX(node* x); //O(n)
-    bool deleteX(int x); //O(n)
-    bool deleteAllX(int x); //O(n)
+    virtual ~LinkedList();
+    node *begin() const;        //O(1)
+    node *search(int myData);   //O(n)
+    int addFirst(int myData);   //O(1)
+    int addBack(int myData);    //O(n) //TODO add tail.
+    bool popback();             //O(n)
+    bool popfront();            //O(1)
+    bool addAfter(int newData, node *myNode);   //O(1)
+    bool addBefore(int newData, node *myNode);  //O(n)
+    bool replace(int newData, node *myNode);    //O(1)
+    bool replace(int newData, int myData);      //O(n) Adds first occurrence of node with data = X
+    bool replaceAll(int newData, int myData);   //O(n) Replace all of nodes of data = X
+    bool deleteX(int myData);           //O(n)
+    bool deleteX(node *myNode);         //O(1)
+    bool deleteAllX(int myData);        //O(n)
+    void print();               //O(n)
 };
 
 
-
-
-#endif //ASFSD_LINKEDLIST_H
+#endif

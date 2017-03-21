@@ -30,11 +30,22 @@ void node::setData(int data) {
 
 LinkedList::LinkedList() {
     size = 0;
-    head = new node(0,NULL);
+    head = new node(0,NULL); //Header value = 0(Won't use it anyway), Nxt = Null (Empty List).
 }
 
-int LinkedList::addBack(int x) {
-    node* newNode = new node(x,NULL);
+LinkedList::~LinkedList() {
+    node* itr = head;
+    node* toDelete;
+    while(itr)
+    {
+        toDelete = itr; //hold current position.
+        itr = itr->getNxt(); //iterate...
+        delete toDelete;//delete current position.
+    }
+}
+
+int LinkedList::addBack(int myData) {
+    node* newNode = new node(myData,NULL);
     node* tmp = head;
     while (tmp->getNxt())
     {
@@ -45,8 +56,8 @@ int LinkedList::addBack(int x) {
     return 0;
 }
 
-int LinkedList::addFirst(int x) {
-    node* tmp = new node(x,begin());
+int LinkedList::addFirst(int myData) {
+    node* tmp = new node(myData,begin());
     head->setNxt(tmp);
     size++;
     return 0;
@@ -66,10 +77,10 @@ node *LinkedList::begin() const {
     return head->getNxt();
 }
 
-node* LinkedList::search(int x) {
+node* LinkedList::search(int myData) {
     node* ptr = begin();
     while(ptr) {
-        if (ptr->data == x) {
+        if (ptr->data == myData) {
             return ptr;
         }
         ptr = ptr->getNxt();
@@ -77,19 +88,20 @@ node* LinkedList::search(int x) {
     return NULL;
 }
 
-bool LinkedList::replace(int a, node *x) {
-    if(x) {
-        x->setData(a);
+bool LinkedList::replace(int newData, node *myNode) {
+    if(myNode) //If not NULL.
+    {
+        myNode->setData(newData);
         return true;
     }
     else return false;
 }
 
-bool LinkedList::replace(int a, int x) {
+bool LinkedList::replace(int newData, int myData) {
     node *ptr = head;
     while (ptr) {
-        if (ptr->data == x){
-            ptr->data=a;
+        if (ptr->data == myData){
+            ptr->data=newData;
             return  true;
         }
         ptr = ptr->getNxt();
@@ -97,12 +109,12 @@ bool LinkedList::replace(int a, int x) {
     return false;
 }
 
-bool LinkedList::replaceAll(int a, int x) {
+bool LinkedList::replaceAll(int newData, int myData) {
     node *ptr = head;
     bool ret = false;
     while (ptr) {
-        if (ptr->data == x){
-            ptr->data = a;
+        if (ptr->data == myData){
+            ptr->data = newData;
             ret = true;
         }
         ptr = ptr->getNxt();
@@ -110,15 +122,16 @@ bool LinkedList::replaceAll(int a, int x) {
     return ret;
 }
 
-bool LinkedList::deleteX(node *x) {
+bool LinkedList::deleteX(node *myNode) {
     node* tmp = head;
-    if(!x)return false;
+    if(!myNode)
+        return false;
     while(tmp)
     {
-        if(tmp->getNxt()==x)
+        if(tmp->getNxt()==myNode)
         {
-            tmp->setNxt(x->getNxt());
-            delete x;
+            tmp->setNxt(myNode->getNxt());
+            delete myNode;
             size--;
             return true;
         }
@@ -127,31 +140,30 @@ bool LinkedList::deleteX(node *x) {
     return false;
 }
 
-bool LinkedList::deleteX(int x) {
+bool LinkedList::deleteX(int myData) {
     node* tmp = head;
     node* del;
-    while(tmp)
+    while(tmp->getNxt())
     {
-        if (tmp->getNxt()) //Check IT is not NULL.
-            if (tmp->getNxt()->data == x) {
-                del = tmp->getNxt();
-                tmp->setNxt(tmp->getNxt()->getNxt());
-                delete del;
-                size--;
-                return true;
-            }
+        if (tmp->getNxt()->data == myData) {
+            del = tmp->getNxt();
+            tmp->setNxt(tmp->getNxt()->getNxt());
+            delete del;
+            size--;
+            return true;
+        }
         tmp = tmp->getNxt();
     }
     return false;
 }
 
-bool LinkedList::deleteAllX(int x) {
+bool LinkedList::deleteAllX(int myData) {
     node* tmp = begin();
     node* before = head;
-    node* toDelete;
+    node* toDelete; //A pointer to hold the to be deleted pointer.
     while(tmp)
     {
-        if(tmp->getData()==x)
+        if(tmp->getData()==myData)
         {
             before->setNxt(tmp->getNxt());
             toDelete = tmp;
@@ -168,23 +180,24 @@ bool LinkedList::deleteAllX(int x) {
     return true;
 }
 
-bool LinkedList::addAfter(int a, node *x){
-    if(!x)
+bool LinkedList::addAfter(int newData, node *myNode){
+    if(!myNode) //if NULL is passed, return false;
         return false;
-    node* tmp = new node(a,x->getNxt());
-    x->setNxt(tmp);
+    node* tmp = new node(newData,myNode->getNxt());
+    myNode->setNxt(tmp);
     size++;
     return true;
 }
 
-bool LinkedList::addBefore(int a, node *x) {
+bool LinkedList::addBefore(int newData, node *myNode) {
+    if(!myNode) //if NULL is passed, return false;
+        return false;
     node* tmp = head;
-    if(!x)return false;
     while(tmp)
     {
-        if(tmp->getNxt()==x)
+        if(tmp->getNxt()==myNode)
         {
-            node* add = new node(a,x);
+            node* add = new node(newData,myNode);
             tmp->setNxt(add);
             size++;
             return true;
@@ -195,12 +208,11 @@ bool LinkedList::addBefore(int a, node *x) {
 }
 
 bool LinkedList::popback() {
-    if(head->getNxt() == NULL)
+    if(!begin()) //If LinkedList is empty, (begin == NULL).
         return false;
     node* tmp = head;
-    while(tmp->getNxt()->getNxt())
+    while(tmp->getNxt()->getNxt()) //Iterate to the before-end cell.
         tmp = tmp->getNxt();
-
     delete tmp->getNxt();
     tmp->setNxt(NULL);
     size--;
@@ -208,11 +220,10 @@ bool LinkedList::popback() {
 }
 
 bool LinkedList::popfront() {
-    if(head->getNxt() == NULL) //Empty List case.
+    if(!begin()) //If LinkedList is empty, (begin == NULL).
         return false;
-
-    node* tmp = head->getNxt()->getNxt(); //The new first element in the list.
-    delete head->getNxt();
+    node* tmp = begin()->getNxt(); //The new first element in the list.
+    delete begin();
     head->setNxt(tmp);
     size--;
     return true;
