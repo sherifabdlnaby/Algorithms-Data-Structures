@@ -55,6 +55,18 @@ void insertionTwosSort(vector<int> &arr, int start, int end) {
             arr[j + 1] = smallHolder;
         }
     }
+    if( !((end-start+1)%2) ) //Handles the case when size is even (Iterating by 2 will terminate without sorting the last element)
+    {
+        int found = arr[end];
+        int i = end - 1;
+        for (; i >= 0; --i) {
+            if (arr[i] > found)
+                arr[i + 1] = arr[i];
+            else
+                break;
+        }
+        arr[i+1] = found;
+    }
 }
 
 int recursiveLowerBound(vector<int> &arr, int &target, int start, int end) {
@@ -106,5 +118,15 @@ void insertionBinaryTwosSort(vector<int> &arr, int start, int end) {
             }
             arr[j + 1] = smallHolder;
         }
+    }
+    if( !((end-start+1)%2) )  //Handles the case when size is even (Iterating by 2 will terminate without sorting the last element)
+    {
+        int found = arr[end];
+        int i = end - 1;
+        int lowerBound = recursiveLowerBound(arr,found,start,i-1);
+        for (; i >= lowerBound; --i) {
+                arr[i + 1] = arr[i];
+        }
+        arr[i+1] = found;
     }
 }
