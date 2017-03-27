@@ -25,7 +25,7 @@ int main() {
     timeEnd("QuickSort\t\t");
 
     timeStart();
-    quickSort(data2, 0, sz-1);
+    quickSortNoSkip(data2, 0, sz-1);
     timeEnd("QuickSortNoSkip\t\t");
 
     timeStart();
