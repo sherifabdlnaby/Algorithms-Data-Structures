@@ -1,10 +1,10 @@
 #include <iostream>
 #include <algorithm>
 #include <ctime>
-#include "Main-QuickSort.h"
+#include "QuickSort.h"
 int start_s,stop_s; //Time holders;
 #define timeStart() start_s=clock();
-#define timeEnd(s)   stop_s=clock();cout << s << " -> Time: " << (stop_s-start_s)/double(CLOCKS_PER_SEC)*1000 << " MS" << endl;
+#define timeEnd(s)  stop_s=clock(); cout << s << " -> Time: " << (stop_s-start_s)/double(CLOCKS_PER_SEC)*1000 << " MS" << endl;
 
 int main() {
     srand(time(NULL));
