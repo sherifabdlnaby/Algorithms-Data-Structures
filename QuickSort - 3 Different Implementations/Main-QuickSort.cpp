@@ -34,7 +34,7 @@ int main() {
 
     timeStart();
     quickSortNaive(data4,0,sz-1);
-    timeEnd("Naive-Sort\t\t");
+    timeEnd("Naive-Q-Sort\t\t");
 
     if(sz > 30000)
         cout << "->>>>> Naive Q-Sort worst case is n^2, your n is > 30000, this will take a significant time..." << endl;
