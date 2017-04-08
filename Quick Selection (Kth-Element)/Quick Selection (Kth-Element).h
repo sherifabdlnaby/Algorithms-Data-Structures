@@ -9,7 +9,7 @@ using namespace std;
 int  partition(vector<int> &arr, int left, int right);
 int  quickSelect(vector<int> &arr, int left, int right, int order);
 
-
+//Select the K-th(order) smallest element, for largest or another sorting use cmp() in partition... 
 int quickSelect(vector<int> &arr, int left, int right, int order)
 {
     if (left < right)//if range is > 2
