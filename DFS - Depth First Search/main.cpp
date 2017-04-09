@@ -1,5 +1,5 @@
 #include <iostream>
-#include "BFS.h"
+#include "DFS.h"
 #include "Graph.h"
 using namespace std;
 
@@ -9,7 +9,6 @@ int main() {
     int nNodes, nEdges, nodeB; //Number Of Nodes, Number of Edges for each node, nodeB in connect Edge.
 
     ///Fill the adjacency list.
-    cout << "Fill the Adjacency List... (use attached examples)" << endl;
     cin >> nNodes;
     for (int nodeA = 0; nodeA < nNodes; ++nodeA) {
         graph1.addNode();
@@ -25,8 +24,9 @@ int main() {
     ///RUN BFS
     int start; int destination; cout << "Enter Start <-> Destination..." << endl;
     cin >> start >> destination;
-    vector<int> ans = shortestPathBFS(start,destination,graph1); //Runs BFS and returns the shortest path
+    vector<int> ans = pathByDFS(start, destination, graph1); //Runs DFS and returns the path taken(Not Shortest Path)
     ///
+
 
     if(ans.size()){ //If There is a path -> Print it.
         cout << "Shortest path takes: " << ans.size()-1 << " Edge(s) to reach destination" << endl;
