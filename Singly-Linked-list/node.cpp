@@ -38,9 +38,9 @@ LinkedList::~LinkedList() {
     node* toDelete;
     while(itr)
     {
-        toDelete = itr; //hold current position.
+        toDelete = itr;		 //hold current position.
         itr = itr->getNxt(); //iterate...
-        delete toDelete;//delete current position.
+        delete toDelete;	 //delete current position.
     }
 }
 
