@@ -13,7 +13,7 @@ bool recDFS(int node, Graph &graph1, vector<bool> &visited)      //Runs DFS (Mod
 {
     visited[node] = true;
     for (int i = 0; i < graph1[node].size(); ++i) { //Iterate over all current node edges.
-        if(!visited[graph1[node][i]]) {             //If not visited -> add it to stack.
+        if(!visited[graph1[node][i]]) {             //If not visited -> recurse
             recDFS(graph1[node][i], graph1, visited);
         }
     }
@@ -35,7 +35,7 @@ int recPDFS(int node, int destination, Graph &graph1, vector<bool> &visited, int
     if(node == destination)
         return found = 1;
     for (int i = 0; i < graph1[node].size() && !found; ++i) { //Iterate over all current node edges until end or dest is found.
-        if(!visited[graph1[node][i]]) {             //If not visited -> add it to stack.
+        if(!visited[graph1[node][i]]) {             //If not visited -> recurse
             recPDFS(graph1[node][i], destination, graph1, visited, found);
         }
     }
