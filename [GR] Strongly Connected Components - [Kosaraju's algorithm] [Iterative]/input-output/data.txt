@@ -1,0 +1,2 @@
+https://s3-us-west-1.amazonaws.com/prod-edx/Algo1/Files/SCC.txt
+//Download this (73.36MB) file -> Rename it "data.txt"
