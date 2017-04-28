@@ -3,89 +3,7 @@
 //
 
 #include "AVL.h"
-#include <iostream>
 
-///Node-Functions...
-
-node::node() {
-    leftChild = rightChild = NULL;
-}
-
-node::node(int data, node *rightChild, node *leftChild) : data(data),
-                                                          leftChild(leftChild),
-                                                          rightChild(rightChild) {
-    height = 1;
-}
-
-void node::setHeight(int height) {
-    node::height = height;
-}
-
-void node::setLeftChild(node *leftChild) {
-    node::leftChild = leftChild;
-}
-
-void node::setRightChild(node *rightChild) {
-    node::rightChild = rightChild;
-}
-
-int node::getData() const {
-    return data;
-}
-
-node *node::getLeftChild() const {
-    return leftChild;
-}
-
-node *node::getRightChild() const {
-    return rightChild;
-}
-
-node *node::getPredecessor() {
-    node *iterator = leftChild;
-    while (iterator->rightChild)
-        iterator = iterator->rightChild;
-    return iterator;
-}
-
-node *node::getSuccessor() {
-    node *iterator = rightChild;
-    while (iterator->leftChild)
-        iterator = iterator->leftChild;
-    return iterator;
-}
-
-int node::getChildMaxHeight() const {
-    return std::max(leftChild ? leftChild->height : 0, rightChild ? rightChild->height : 0);
-}
-
-int node::getBalance() const {
-    return (leftChild ? leftChild->height : 0) - (rightChild ? rightChild->height : 0);
-}
-
-node *node::rotateLeft() {
-    node *tmp = rightChild;
-    rightChild = tmp->leftChild;
-    tmp->leftChild = this;
-
-    ///Update heights
-    this->height = getChildMaxHeight() + 1;
-    tmp->height = getChildMaxHeight() + 1;
-
-    return tmp; //To be assigned to parent on return.
-}
-
-node *node::rotateRight() {
-    node *tmp = leftChild;
-    leftChild = tmp->rightChild;
-    tmp->rightChild = this;
-
-    ///Update heights
-    this->height = getChildMaxHeight() + 1;
-    tmp->height = getChildMaxHeight() + 1;
-
-    return tmp; //To be assigned to parent on return.
-}
 
 ///AVL-Functions...
 
@@ -98,8 +16,8 @@ int AVL::min() {
         throw 6800;
     //Iterate to the MAX element.
     node *iterator = root;
-    while (iterator->getLeftChild())
-        iterator = iterator->getLeftChild();
+    while (iterator->leftChild)
+        iterator = iterator->leftChild;
     return iterator->data;
 }
 
@@ -108,8 +26,8 @@ int AVL::max() {
         throw 6800;
     //Iterate to the MIN element.
     node *iterator = root;
-    while (iterator->getRightChild())
-        iterator = iterator->getRightChild();
+    while (iterator->rightChild)
+        iterator = iterator->rightChild;
     return iterator->data;
 }
 
@@ -125,8 +43,8 @@ void AVL::erase(int data) {
     root = eraseRec(data, root);    //Recursively Delete
 }
 
-void AVL::print() {
-    std::cout << "BST(Sorted order): ";
+void AVL::printInOrder() {
+    std::cout << "AVL(Sorted order): ";
     recursivePrint(root);
     std::cout << "\n";
 }
@@ -134,65 +52,57 @@ void AVL::print() {
 void AVL::recursivePrint(node *parent) {
     if (parent == NULL)
         return;
-    recursivePrint(parent->getLeftChild());
+    recursivePrint(parent->leftChild);
     std::cout << parent->data << " ";
-    recursivePrint(parent->getRightChild());
+    recursivePrint(parent->rightChild);
 }
 
-node *AVL::search(int data) {
+bool AVL::search(int data) {
     node *iterator = root;
     while (iterator) {
         if (iterator->data == data)
-            return iterator;
+            return true;
         else if (iterator->data < data)
-            iterator = iterator->getRightChild();
+            iterator = iterator->rightChild;
         else
-            iterator = iterator->getLeftChild();
+            iterator = iterator->leftChild;
     }
-    return NULL;
+    return false;
 }
 
-node *AVL::getSuccessor(int data) {
-    return search(data)->getSuccessor();
-}
-
-node *AVL::getPredecessor(int data) {
-    return search(data)->getPredecessor();
-}
-
-node *AVL::insertRec(int data, node *parent) {
+AVL::node *AVL::insertRec(int data, node *parent) {
     //NULL ? Create new node here and return address to the recursiveCall to link it.
     if (parent == NULL)
         return new node(data, NULL, NULL);
     if (parent->data < data)
-        parent->setRightChild(insertRec(data, parent->getRightChild()));
+        parent->rightChild = insertRec(data, parent->rightChild);
     else
-        parent->setLeftChild(insertRec(data, parent->getLeftChild()));
+        parent->leftChild  = insertRec(data, parent->leftChild);
 
     //////Update and Balance after *each* recursive call//////
 
-    parent->setHeight(parent->getChildMaxHeight() + 1); //Update height at each call (Up to the initial root).
+    parent->height = parent->getChildMaxHeight() + 1; //Update height at each call (Up to the initial root).
     int balance = parent->getBalance();
 
     //Updating root or returning different root, link it's parent with it according to the recursive calls.
 
     ///Left-Left
-    if (balance > 1 && parent->getLeftChild()->data > data)
-        return parent->rotateRight(); //Will return the new root(and assigned by the recursive call)
+    if (balance > 1 && parent->leftChild->data > data)
+        return parent->rotateRight(); //Will return the new root(and assigned to parent by the recursive call)
 
     ///Left-Right
-    if (balance > 1 && parent->getLeftChild()->data < data) {
-        parent->setLeftChild(parent->getLeftChild()->rotateLeft());
+    if (balance > 1 && parent->leftChild->data < data) {
+        parent->leftChild = parent->leftChild->rotateLeft();
         return parent->rotateRight();
     }
 
     ///Right-Right
-    if (balance < -1 && parent->getRightChild()->data < data)
+    if (balance < -1 && parent->rightChild->data < data)
         return parent->rotateLeft();
 
     ///Right-Left
-    if (balance < -1 && parent->getRightChild()->data > data) {
-        parent->setRightChild(parent->getRightChild()->rotateRight());
+    if (balance < -1 && parent->rightChild->data > data) {
+        parent->rightChild = parent->rightChild->rotateRight();
         return parent->rotateLeft();
     }
     //////////////////////////////////////////////////////////
@@ -200,19 +110,18 @@ node *AVL::insertRec(int data, node *parent) {
     return parent; //If root was unchanged.
 }
 
-node *AVL::eraseRec(int data, node *parent) {
+AVL::node *AVL::eraseRec(int data, node *parent) {
 
     ///Recursive search + updating..
     if (parent == NULL)                                                     //Reached NULL, nothing to be deleted;
         return parent;
     if (data < parent->data)
-        parent->setLeftChild(eraseRec(data,
-                                      parent->getLeftChild()));             //Search on the left route and update it if there are changes
+        parent->leftChild  = eraseRec(data, parent->leftChild);             //Search on the left route and update it if there are changes
     else if (data > parent->data)
-        parent->setRightChild(eraseRec(data, parent->getRightChild()));     //Search on the right rout and update it.
+        parent->rightChild = eraseRec(data, parent->rightChild);            //Search on the right rout and update it.
     else {
-        node *leftChild = parent->getLeftChild();
-        node *rightChild = parent->getRightChild();
+        node *leftChild = parent->leftChild;                                //for code simplicity. (could be omitted)
+        node *rightChild = parent->rightChild;                               //^-------------------------------------^
         if (leftChild == NULL && rightChild == NULL) {                      //Case #1: Has no children.
             node *tmp = parent;
             parent = NULL;
@@ -222,24 +131,22 @@ node *AVL::eraseRec(int data, node *parent) {
             parent = leftChild ? leftChild : rightChild;                    //Select the non-NULL child.
             delete tmp;
         } else {                                                            //Case #3: Has two children.
-            node *successor = parent->getSuccessor();
+            node *successor = parent->getMaxNode();
             parent->data = successor->data;
-            parent->setRightChild(
-                    eraseRec(successor->getData(),
-                             parent->getRightChild()));                     //recursive call (Case #1 || Case #2 is guaranteed)
+            parent->rightChild =  eraseRec(successor->data, rightChild);    //recursive call (Case #1 || Case #2 is guaranteed)
         }
     }
 
-    if (parent == NULL)   //in-case root = NULL after deletion(if this is the recursive call we actually deleted in.)
+    if (parent == NULL)   //in-case root = NULL after deletion(this is the recursive call we actually deleted the target in.)
         return parent;
 
     ///Update + Balance nodes at each recursive call (before return...)
-    parent->setHeight(parent->getChildMaxHeight() + 1);   //Update current node Height.
-    int balance = parent->getChildMaxHeight();            //Root balance score.
-    int rightBalance = parent->getRightChild() ? parent->getRightChild()->getBalance(): 0;  //if right is NULL balance = 0; else calculate it.
-    int leftBalance  = parent->getLeftChild()  ? parent->getLeftChild()->getBalance() : 0;  //^--left ---------------------------------------^
+    parent->height   = parent->getChildMaxHeight() + 1;        //Update current node Height.
+    int balance      = parent->getBalance();                   //Root balance score.
+    int rightBalance = parent->rightChild ? parent->rightChild->getBalance(): 0;  //if right is NULL balance = 0; else calculate it.
+    int leftBalance  = parent->leftChild  ? parent->leftChild->getBalance() : 0;  //^--left ---------------------------------------^
 
-    //Updating root or returning different root, link it's parent with it according to the recursive calls
+    //Updating root or returning a different root, link it's parent with it according to the recursive calls
     //Will return the new root(and assigned by the recursive call)
 
     ///left-left
@@ -247,7 +154,7 @@ node *AVL::eraseRec(int data, node *parent) {
         return parent->rotateRight();
     ///left-right
     if (balance > 1 && leftBalance > 0) {
-        parent->setLeftChild(parent->getLeftChild()->rotateLeft());
+        parent->leftChild = parent->leftChild->rotateLeft();
         return parent->rotateRight();
     }
     ///right-right
@@ -255,7 +162,7 @@ node *AVL::eraseRec(int data, node *parent) {
         return parent->rotateLeft();
     ///right-left
     if (balance < -1 && rightBalance > 0) {
-        parent->setRightChild(parent->getRightChild()->rotateRight());
+        parent->rightChild = parent->rightChild->rotateRight();
         return parent->rotateLeft();
     }
 
@@ -264,3 +171,59 @@ node *AVL::eraseRec(int data, node *parent) {
 }
 
 
+///Node-Functions...
+AVL::node::node() {
+    leftChild = rightChild = NULL;
+}
+
+AVL::node::node(int data, node *rightChild, node *leftChild) : data(data),
+                                                               leftChild(leftChild),
+                                                               rightChild(rightChild) {
+    height = 1;
+}
+
+AVL::node *AVL::node::getMinNode() {
+    node *iterator = leftChild;
+    while (iterator->rightChild)
+        iterator = iterator->rightChild;
+    return iterator;
+}
+
+AVL::node *AVL::node::getMaxNode() {
+    node *iterator = rightChild;
+    while (iterator->leftChild)
+        iterator = iterator->leftChild;
+    return iterator;
+}
+
+int AVL::node::getChildMaxHeight() const {
+    return std::max(leftChild ? leftChild->height : 0, rightChild ? rightChild->height : 0);
+}
+
+int AVL::node::getBalance() const {
+    return (leftChild ? leftChild->height : 0) - (rightChild ? rightChild->height : 0);
+}
+
+AVL::node *AVL::node::rotateLeft() {
+    node *tmp = rightChild;
+    rightChild = tmp->leftChild;
+    tmp->leftChild = this;
+
+    ///Update heights
+    this->height = getChildMaxHeight() + 1;
+    tmp->height = getChildMaxHeight() + 1;
+
+    return tmp; //To be assigned to parent on return.
+}
+
+AVL::node *AVL::node::rotateRight() {
+    node *tmp = leftChild;
+    leftChild = tmp->rightChild;
+    tmp->rightChild = this;
+
+    ///Update heights
+    this->height = getChildMaxHeight() + 1;
+    tmp->height = getChildMaxHeight() + 1;
+
+    return tmp; //To be assigned to parent on return.
+}
