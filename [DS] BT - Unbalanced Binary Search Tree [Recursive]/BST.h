@@ -4,41 +4,36 @@
 
 #ifndef BST_BST_H
 #define BST_BST_H
-class node {
-    node* leftChild;
-    node* rightChild;
-public:
-    int data;
-    node();
-    node(int data, node *rightChild, node *leftChild);
-    int getData() const;
-    node* getLeftChild() const;
-    node* getRightChild() const;
-    node* getPredecessor();
-    node* getSuccessor();
-    void setLeftChild(node *leftChild);
-    void setRightChild(node *rightChild);
-};
+#include <iostream> //for std::pair<>, cout, cin;
+using namespace std;
 
 class BST {
 private:
-    void recursivePrint(node* data);
-    node* insertRec(int data, node *root);
-    node* eraseRec(int data, node *root);
+    class node;
+    node* root;
+    node* insertRec(int data, node *parent);  //Recursive(Insert node* and return new root address(or unchanged in mid-recursive calls).
+    node* eraseRec(int data, node *parent);   //Recursive(Erase node* with data = parameter, and return new root after deletion).
+    void  recursivePrint(node* parent);       //Recursively print all children of given node in sorted order.
 public:
     BST();
-    node* root;
-    node* search(int data);
-    int max();
-    int min();
-    //Wrapper Functions//
-    void insert(int data);
-    void erase(int data);
-    node* getSuccessor(int data);
-    node* getPredecessor(int data);
-    //.................//
-    void print(); //wrapper function
+    int max();                                //Return the maximum element in the Tree.
+    int min();                                //^..........minimum....................^
+    void insert(int data);                    //Insert data and call the recursiveInsertions #Wrapper
+    void erase (int data);                    //Erase  data and call the recursiveErase      #Wrapper
+    bool search(int data);                    //Search for a node with the given data, return FALSE if unsuccessful.
+    void printInOrder();                      //Print The tree in sorted order, calls recursivePrint from the root. #Wrapper
 };
 
+
+class BST::node {
+public:
+    int data;
+    node* leftChild;
+    node* rightChild;
+    node();
+    node(int data, node *rightChild, node *leftChild);
+    node* getMinNode();                     //Return node* to the next smaller element in the tree.
+    node* getMaxNode();                     //Return node* to the next greater element in the tree.
+};
 
 #endif //BST_BST_H

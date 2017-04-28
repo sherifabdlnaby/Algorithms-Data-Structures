@@ -14,14 +14,7 @@ int main() {
         tree.insert(x);
     }
 
-    tree.print();
-
-    for (int i = 0; i < n; ++i) {
-        cout << "Enter a number you want to delete" << endl;
-        cin >> x;
-        tree.erase(x);
-        tree.print();
-    }
+    tree.printInOrder();
 
     return 0;
 }
