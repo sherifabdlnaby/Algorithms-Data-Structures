@@ -150,15 +150,15 @@ AVL::node *AVL::eraseRec(int data, node *parent) {
     //Will return the new root(and assigned by the recursive call)
 
     ///left-left
-    if (balance > 1 && leftBalance > 0)
+    if (balance > 1 && leftBalance >= 0)
         return parent->rotateRight();
     ///left-right
-    if (balance > 1 && leftBalance > 0) {
+    if (balance > 1 && leftBalance < 0) {
         parent->leftChild = parent->leftChild->rotateLeft();
         return parent->rotateRight();
     }
     ///right-right
-    if (balance < -1 && rightBalance > 0)
+    if (balance < -1 && rightBalance <= 0)
         return parent->rotateLeft();
     ///right-left
     if (balance < -1 && rightBalance > 0) {
