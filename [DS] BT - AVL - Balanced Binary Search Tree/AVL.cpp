@@ -211,7 +211,7 @@ AVL::node *AVL::node::rotateLeft() {
 
     ///Update heights
     this->height = getChildMaxHeight() + 1;
-    tmp->height = getChildMaxHeight() + 1;
+    tmp->height = tmp->getChildMaxHeight() + 1;
 
     return tmp; //To be assigned to parent on return.
 }
@@ -223,7 +223,7 @@ AVL::node *AVL::node::rotateRight() {
 
     ///Update heights
     this->height = getChildMaxHeight() + 1;
-    tmp->height = getChildMaxHeight() + 1;
+    tmp->height = tmp->getChildMaxHeight() + 1;
 
     return tmp; //To be assigned to parent on return.
 }
