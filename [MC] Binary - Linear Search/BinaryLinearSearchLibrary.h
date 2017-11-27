@@ -16,7 +16,7 @@ bool linearSearch(int *arr, int target, int start, int end) {
 
 bool binarySearch(int *arr, int target, int start, int end) {
     while (start <= end) {
-        int mid = (start + end) / 2; //May overflow(int) if array is too big (use long long instead).
+        int mid = start + ((end - start) / 2);  //Avoid Overflow
         if (arr[mid] == target)
             return true;
         else if (arr[mid] < target)
@@ -30,7 +30,7 @@ bool binarySearch(int *arr, int target, int start, int end) {
 bool recursiveBinarySearch(int *arr, int target, int start, int end) {
     if(start > end)
         return false;
-    int mid = ( start+end ) / 2; //May overflow(int) if array is too big (use long long instead).
+    int mid = start + ((end - start) / 2);  //Avoid Overflow
     if (arr[mid] == target)
         return true;
     else if( arr[mid] > target )
