@@ -25,22 +25,22 @@ int main() {
 }
 
 int recursiveLowerBound(vector<int> &arr, int &target, int start, int end) {
-    if(start > end)
+    if(start >= end)
         return start;
     int mid = ( start+end ) / 2;
     if( arr[mid] >= target ) //if == target -> Keep searching for a smaller input.
-        return recursiveLowerBound(arr,target,start,mid-1);
+        return recursiveLowerBound(arr,target,start,mid);
     else
         return recursiveLowerBound(arr,target,mid+1,end);
 }
 
 int recursiveUpperBound(vector<int> &arr, int &target, int start, int end) {
-    if(start > end)
+    if(start >= end)
         return start;
     int mid = ( start+end ) / 2;
     if( arr[mid] <= target ) //if == target -> Keep searching for a larger input.
         return recursiveUpperBound(arr,target,mid+1,end);
     else
-        return recursiveUpperBound(arr,target,start,mid-1);
+        return recursiveUpperBound(arr,target,start,mid);
 
 }
