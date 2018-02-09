@@ -95,9 +95,9 @@ void heap<T>::heapify(int i) {
     int parent = i;
     int left = (i << 1) + 1;
     int right = (i << 1) + 2;
-    if (cmp(data[left] , data[parent]) && left < data.size())
+    if (left < data.size() && cmp(data[left] , data[parent]) )
         parent = left;
-    if (cmp(data[right] , data[parent]) && right < data.size())
+    if (right < data.size() && cmp(data[right] , data[parent]) )
         parent = right;
     if (parent != i) {
         swap(data[i], data[parent]);
