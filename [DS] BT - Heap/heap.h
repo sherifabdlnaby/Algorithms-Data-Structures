@@ -15,6 +15,7 @@ private:
     int  parentIdx(int &i);
     void heapify(int i);
     void buildHeap();
+    void bubbleUp(int i);
     bool (*cmp)(T A, T B);
     static bool cmpDefault(T x, T y);
 public:
@@ -25,6 +26,7 @@ public:
     bool empty();
     void pop();
     void insert(int newData);
+
 };
 
 template<class T>
@@ -54,8 +56,12 @@ int heap<T>::parentIdx(int &i) { return (i - 1) / 2; }
 template<class T>
 void heap<T>::insert(int newData) {
     data.push_back(newData);
+    bubbleUp(data.size()-1);
+    return;
+}
 
-    int i = data.size()-1;
+template <class T>
+void heap<T>::bubbleUp(int i){
     int parent = parentIdx(i);
 
     //Bubble Upwards.
@@ -65,8 +71,6 @@ void heap<T>::insert(int newData) {
         i = parent;
         parent = parentIdx(i);
     }
-
-    return;
 }
 
 template<class T>
