@@ -36,7 +36,7 @@ void mergeSort(int arr[], int start, int end) {
     if (end <= start)
         return;
     else {
-        int mid = (start + end) / 2;
+        int mid = start + ((end - start) / 2);  //Avoid Overflow
         mergeSort(arr, start, mid);
         mergeSort(arr, mid + 1, end);
         mergeArrays(arr, start, end, mid);
@@ -50,7 +50,7 @@ void mergeSortOpt(int arr[], int start, int end) {
     else if (end - start < 41)
         insertionSort(arr, start, end);
     else {
-        int mid = (start + end) / 2;
+        int mid = start + ((end - start) / 2);  //Avoid Overflow
         mergeSort(arr, start, mid);
         mergeSort(arr, mid + 1, end);
         mergeArrays(arr, start, end, mid);
