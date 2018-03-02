@@ -19,8 +19,8 @@ int mergeAndCount(int *arr, int start, int end, int mid) {
             cpyArr[k] = arr[j++];
         else if (arr[i] <= arr[j])
             cpyArr[k] = arr[i++];
-        //Inversion found! (ElseIf condition unnecessary, just for Illustration)
-        else if (arr[i] > arr[j]) {
+        else {
+            //Inversion found!
             count += mid + 1 - i;
             cpyArr[k] = arr[j++];
         }

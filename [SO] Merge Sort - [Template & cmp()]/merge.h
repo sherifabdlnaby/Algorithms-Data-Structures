@@ -54,6 +54,8 @@ void mergeArrays(T arr[],int start, int end, int mid, bool (*cmp)(T,T) = cmpDefa
     for(int i=start; i<=end; i++)
         arr[i] = cpyArr[j++];
 
+    delete[] cpyArr;
+    
     return;
 }
 

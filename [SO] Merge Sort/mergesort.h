@@ -29,6 +29,8 @@ void mergeArrays(int arr[], int start, int end, int mid) {
     for (int i = start; i <= end; i++)
         arr[i] = cpyArr[j++];
 
+    delete[] cpyArr;
+
     return;
 }
 
