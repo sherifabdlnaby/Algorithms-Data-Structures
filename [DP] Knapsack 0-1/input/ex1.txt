@@ -1,0 +1,12 @@
+6 10
+20 1
+5 2
+10 3
+40 8
+15 7
+25 4
+
+
+Answer:
+	TotalWeight: 10(item: 0, 1, 2, 5) or 9(item: 0, 3)
+	TotalValue:  60
