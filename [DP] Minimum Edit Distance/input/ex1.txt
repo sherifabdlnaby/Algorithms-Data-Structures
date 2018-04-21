@@ -1,0 +1,24 @@
+aqqabkikssfgdigclbwljfab
+ruifajammrayudqiiyhmlulkxuxylbfx
+
+-minimum operations: 27
+
+-----------------------------------------------
+
+ymyfazjqnyrrpywyvrrblzapnjfgvdbgrhwwxscsdqlicoc
+gftigeqaqlfwkl
+
+-minimum operations: 42
+
+
+-----------------------------------------------
+
+
+xkpnuttjpsyqbzzdlgueeprzqyiobfqxwslsvazucpfmiocuqspmh
+cdlofgutpy
+
+-minimum operations: 47
+
+
+
+*note:  (can contain different valid optimal set of opertaions)
